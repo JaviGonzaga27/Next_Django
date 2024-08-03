@@ -26,7 +26,7 @@ const useAuth = () => {
 
     const fetchUserDetails = async (userId) => {
         try {
-            const response = await api.get(`/usuarios/${userId}/`);
+            const response = await api.get(`/api/usuarios/${userId}/`);
             setUser(response.data);
             setLoading(false);
         } catch (error) {
@@ -38,7 +38,7 @@ const useAuth = () => {
 
     const login = async (username, password) => {
         try {
-            const response = await api.post('/token/', { username, password });
+            const response = await api.post('/api/token/', { username, password });
             localStorage.setItem('accessToken', response.data.access);
             const decoded = jwtDecode(response.data.access);
             await fetchUserDetails(decoded.user_id);

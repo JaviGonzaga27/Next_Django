@@ -1,11 +1,17 @@
-import Sidebar from 'Sidebar';
-import Navbar from 'Navbar';
+import React, { useState } from 'react';
+import { useAppContext } from '../../contexts/AppContext';
+import Sidebar from './Sidebar';
+import Navbar from './Navbar';
 
 const Layout = ({ children }) => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const { user, logout } = useAuth();
+    const { user, logout, loading } = useAppContext();
 
     const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+
+    if (loading) {
+        return <div>Cargando...</div>;
+    }
 
     return (
         <div className="flex h-screen bg-gray-100">

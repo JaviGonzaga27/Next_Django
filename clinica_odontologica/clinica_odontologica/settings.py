@@ -56,7 +56,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-
 ]
 
 REST_FRAMEWORK = {
@@ -91,9 +90,9 @@ SIMPLE_JWT = {
 
 ROOT_URLCONF = 'clinica_odontologica.urls'
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-]
+CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOW_CREDENTIALS = True
 
 AUTH_USER_MODEL = 'usuarios.Usuario'
 
