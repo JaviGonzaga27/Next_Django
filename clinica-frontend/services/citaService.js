@@ -1,7 +1,7 @@
 import api from './api'
 
-export const getCitas = async () => {
-    const response = await api.get('/api/citas/');
+export const getCitas = async (params = {}) => {
+    const response = await api.get('/api/citas/', { params });
     return response.data;
 };
 
@@ -31,6 +31,15 @@ export const updateCita = async (id, cita) => {
 export const deleteCita = async (id) => {
     try {
         await api.delete(`/api/citas/${id}/`);
+    } catch (error) {
+        handleApiError(error);
+    }
+};
+
+export const getEstadisticas = async () => {
+    try {
+        const response = await api.get('/api/citas/estadisticas/');
+        return response.data;
     } catch (error) {
         handleApiError(error);
     }

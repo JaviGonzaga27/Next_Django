@@ -4,6 +4,8 @@ from rest_framework.views import APIView
 from .models import Cita
 from .controllers import CitaController
 from .serializers import CitaSerializer
+from django.utils import timezone
+from datetime import timedelta
 
 class CitaListView(APIView):
     def get(self, request):
@@ -41,3 +43,24 @@ class CitaDetailView(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Cita.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+class EstadisticasCitasView(APIView):
+    def get(self, request):
+        hoy = timezone.now().date()
+        semana = hoy + timedelta(days=7)
+        
+        citas_hoy = Cita.objects.filter(fecha__date=hoy).count()
+        
+        proxima_cita = Cita.objects.filter(fecha__gte=timezone.now()).order_by('fecha').first()
+        proxima_cita_str = proxima_cita.fecha.strftime("%H:%M") if proxima_cita else "No hay citas programadas"
+        
+        citas_semana = Cita.objects.filter(fecha__date__range=[hoy, semana]).count()
+        
+        citas_pendientes = Cita.objects.filter(fecha__gte=timezone.now(), estado='PROGRAMADA').count()
+
+        return Response({
+            'citasHoy': citas_hoy,
+            'proximaCita': proxima_cita_str,
+            'citasSemana': citas_semana,
+            'citasPendientes': citas_pendientes
+        }, status=status.HTTP_200_OK)

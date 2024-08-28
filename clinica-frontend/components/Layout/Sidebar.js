@@ -8,7 +8,6 @@ const menuItems = [
     { name: 'Pacientes', icon: <FaUserInjured />, path: '/pacientes' },
     { name: 'Doctores', icon: <FaUserMd />, path: '/doctores' },
     { name: 'Citas', icon: <FaCalendarAlt />, path: '/citas' },
-    { name: 'Reportes', icon: <FaChartBar />, path: '/reportes' },
 ];
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
