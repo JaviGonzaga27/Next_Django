@@ -1,7 +1,6 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Cita
 from .serializers import CitaSerializer
 from .controllers import CitaController
 
@@ -24,19 +23,19 @@ class CitaDetailView(APIView):
             cita = CitaController.obtener_cita(pk)
             serializer = CitaSerializer(cita)
             return Response(serializer.data)
-        except Cita.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        except ValueError as e:
+            return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
         
     def put(self, request, pk):
         try:
             cita = CitaController.actualizar_cita(pk, **request.data)
             return Response(CitaSerializer(cita).data)
-        except Cita.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        except ValueError as e:
+            return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
         
     def delete(self, request, pk):
         try:
             CitaController.eliminar_cita(pk)
             return Response(status=status.HTTP_204_NO_CONTENT)
-        except Cita.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        except ValueError as e:
+            return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)

@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from .models import Usuario
 
 class UsuarioController:
@@ -11,17 +12,26 @@ class UsuarioController:
     
     @staticmethod
     def obtener_usuario(usuario_id):
-        return Usuario.objects.get(id=usuario_id)
+        try:
+            return Usuario.objects.get(id=usuario_id)
+        except ObjectDoesNotExist:
+            raise ValueError(f"No se encontró un usuario con id {usuario_id}")
     
     @staticmethod
     def actualizar_usuario(usuario_id, **kwargs):
-        usuario = Usuario.objects.get(id=usuario_id)
-        for key, value in kwargs.items():
-            setattr(usuario, key, value)
-        usuario.save()
-        return usuario
+        try:
+            usuario = Usuario.objects.get(id=usuario_id)
+            for key, value in kwargs.items():
+                setattr(usuario, key, value)
+            usuario.save()
+            return usuario
+        except ObjectDoesNotExist:
+            raise ValueError(f"No se encontró un usuario con id {usuario_id}")
     
     @staticmethod
     def eliminar_usuario(usuario_id):
-        usuario = Usuario.objects.get(id=usuario_id)
-        usuario.delete()
+        try:
+            usuario = Usuario.objects.get(id=usuario_id)
+            usuario.delete()
+        except ObjectDoesNotExist:
+            raise ValueError(f"No se encontró un usuario con id {usuario_id}")
