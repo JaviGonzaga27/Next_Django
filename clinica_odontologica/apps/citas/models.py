@@ -16,11 +16,3 @@ class Cita(models.Model):
 
     def __str__(self):
         return f"Cita de {self.paciente} con {self.doctor} el {self.fecha}"
-    
-    def cancelar(self):
-        self.estado = 'CANCELADA'
-        self.save()
-
-    def completar(self):
-        self.estado = 'COMPLETADA'
-        self.save()

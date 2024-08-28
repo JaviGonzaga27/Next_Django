@@ -1,16 +1,10 @@
+import { Doctor } from './Doctor';
+import { Paciente } from './Paciente';
+
 export interface Cita {
     id: number;
-    paciente: {
-        id: number;
-        nombre: string;
-    };
-    doctor: {
-        id: number;
-        usuario: {
-            first_name: string;
-            last_name: string;
-        };
-    };
+    paciente: Paciente;
+    doctor: Doctor;
     fecha: string;
     duracion: number;
     motivo: string;

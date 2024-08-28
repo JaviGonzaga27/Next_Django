@@ -21,8 +21,10 @@ class CitaController:
     def actualizar_cita(cita_id, **kwargs):
         try:
             cita = Cita.objects.get(id=cita_id)
+            
             for key, value in kwargs.items():
                 setattr(cita, key, value)
+            
             cita.save()
             return cita
         except ObjectDoesNotExist:

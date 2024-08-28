@@ -6,7 +6,8 @@ const UsuarioForm = ({ onSubmit, initialData, onCancel }) => {
         email: '',
         first_name: '',
         last_name: '',
-        is_active: true
+        is_active: true,
+        password: ''
     });
     const [errors, setErrors] = useState({});
 
@@ -35,6 +36,7 @@ const UsuarioForm = ({ onSubmit, initialData, onCancel }) => {
         if (!/\S+@\S+\.\S+/.test(formData.email)) formErrors.email = 'Email inválido';
         if (!formData.first_name) formErrors.first_name = 'El nombre es requerido';
         if (!formData.last_name) formErrors.last_name = 'El apellido es requerido';
+        if (!formData.password) formErrors.password = 'La contraseña es requerida';
         return formErrors;
     };
 
@@ -105,6 +107,20 @@ const UsuarioForm = ({ onSubmit, initialData, onCancel }) => {
                     className={`mt-1 block w-full border ${errors.last_name ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
                 />
                 {errors.last_name && <p className="mt-2 text-sm text-red-600">{errors.last_name}</p>}
+            </div>
+            <div>
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                    Contraseña
+                </label>
+                <input
+                    type="password"
+                    name="password"
+                    id="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className={`mt-1 block w-full border ${errors.password ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+                />
+                {errors.password && <p className="mt-2 text-sm text-red-600">{errors.password}</p>}
             </div>
             <div className="flex items-center">
                 <input

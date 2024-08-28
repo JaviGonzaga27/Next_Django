@@ -1,16 +1,35 @@
 import React, { useState, useEffect } from 'react';
+import { getUsuarios } from '../../services/usuarioService';
 
-const DoctorForm = ({ onSubmit, initialData }) => {
+const DoctorForm = ({ onSubmit, initialData, onCancel }) => {
     const [formData, setFormData] = useState({
-        usuario: '',
+        usuario_id: '',
         especialidad: '',
         telefono: '',
-        is_active: true
+        is_active: true,
     });
 
+    const [usuarios, setUsuarios] = useState([]);
+
     useEffect(() => {
+        const fetchUsuarios = async () => {
+            try {
+                const data = await getUsuarios();
+                setUsuarios(data);
+            } catch (error) {
+                console.error('Error fetching usuarios', error);
+            }
+        };
+
+        fetchUsuarios();
+
         if (initialData) {
-            setFormData(initialData);
+            setFormData({
+                usuario_id: initialData.usuario.id,
+                especialidad: initialData.especialidad,
+                telefono: initialData.telefono,
+                is_active: initialData.is_active,
+            });
         }
     }, [initialData]);
 
@@ -26,23 +45,29 @@ const DoctorForm = ({ onSubmit, initialData }) => {
         e.preventDefault();
         onSubmit(formData);
         setFormData({
-            usuario: '',
+            usuario_id: '',
             especialidad: '',
             telefono: '',
-            is_active: true
+            is_active: true,
         });
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <input
-                type="text"
-                name="usuario"
-                value={formData.usuario}
+        <form onSubmit={handleSubmit} className="space-y-4">
+            <select
+                name="usuario_id"
+                value={formData.usuario_id}
                 onChange={handleChange}
-                placeholder="ID del Usuario"
                 required
-            />
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300"
+            >
+                <option value="">Seleccione un usuario</option>
+                {usuarios.map(usuario => (
+                    <option key={usuario.id} value={usuario.id}>
+                        {`${usuario.first_name} ${usuario.last_name}`}
+                    </option>
+                ))}
+            </select>
             <input
                 type="text"
                 name="especialidad"
@@ -50,6 +75,7 @@ const DoctorForm = ({ onSubmit, initialData }) => {
                 onChange={handleChange}
                 placeholder="Especialidad"
                 required
+                className="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300"
             />
             <input
                 type="tel"
@@ -58,17 +84,33 @@ const DoctorForm = ({ onSubmit, initialData }) => {
                 onChange={handleChange}
                 placeholder="Teléfono"
                 required
+                className="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300"
             />
-            <label>
+            <label className="flex items-center">
                 <input
                     type="checkbox"
                     name="is_active"
                     checked={formData.is_active}
                     onChange={handleChange}
+                    className="form-checkbox h-5 w-5 text-indigo-600"
                 />
-                Activo
+                <span className="ml-2 text-gray-700">Activo</span>
             </label>
-            <button type="submit">{initialData ? 'Actualizar' : 'Crear'} Doctor</button>
+            <div className="flex space-x-2">
+                <button 
+                    type="submit"
+                    className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                >
+                    {initialData ? 'Actualizar' : 'Crear'} Doctor
+                </button>
+                <button 
+                    type="button"
+                    onClick={onCancel}
+                    className="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                >
+                    Cancelar
+                </button>
+            </div>
         </form>
     );
 };

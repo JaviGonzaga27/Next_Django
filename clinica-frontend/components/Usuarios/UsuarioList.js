@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTable, useSortBy, useGlobalFilter, usePagination } from 'react-table';
-import { ChevronUpIcon, ChevronDownIcon, PencilIcon, TrashIcon, EyeIcon } from '@heroicons/react/20/solid';
+import { ChevronUpIcon, ChevronDownIcon, ChevronDoubleLeftIcon, ChevronLeftIcon, ChevronRightIcon, ChevronDoubleRightIcon, PencilIcon, TrashIcon, EyeIcon } from '@heroicons/react/20/solid';
 import { useUsuarios } from '../../hooks/useUsuarios'
 
 const UsuarioList = ({ onEdit, onDelete, onView }) => {
@@ -132,67 +132,66 @@ const UsuarioList = ({ onEdit, onDelete, onView }) => {
                     </tbody>
                 </table>
             </div>
-            <div className="py-3 flex items-center justify-between">
-                <div className="flex-1 flex justify-between sm:hidden">
-                    <button onClick={() => previousPage()} disabled={!canPreviousPage} className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+            <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
+                <div className="flex flex-1 justify-between sm:hidden">
+                    <button
+                        onClick={() => previousPage()}
+                        disabled={!canPreviousPage}
+                        className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    >
                         Anterior
                     </button>
-                    <button onClick={() => nextPage()} disabled={!canNextPage} className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                    <button
+                        onClick={() => nextPage()}
+                        disabled={!canNextPage}
+                        className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    >
                         Siguiente
                     </button>
                 </div>
-                <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                    <div className="flex gap-x-2 items-baseline">
-                        <span className="text-sm text-gray-700">
-                            Página <span className="font-medium">{pageIndex + 1}</span> de <span className="font-medium">{pageOptions.length}</span>
-                        </span>
-                        <select
-                            value={pageSize}
-                            onChange={e => {
-                                setPageSize(Number(e.target.value))
-                            }}
-                            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                        >
-                            {[5, 10, 20, 30, 40, 50].map(pageSize => (
-                                <option key={pageSize} value={pageSize}>
-                                    Mostrar {pageSize}
-                                </option>
-                            ))}
-                        </select>
+                <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+                    <div>
+                        <p className="text-sm text-gray-700">
+                            Mostrando <span className="font-medium">{pageIndex * pageSize + 1}</span> a <span className="font-medium">{Math.min((pageIndex + 1) * pageSize, data.length)}</span> de{' '}
+                            <span className="font-medium">{data.length}</span> resultados
+                        </p>
                     </div>
                     <div>
-                        <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                        <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
                             <button
                                 onClick={() => gotoPage(0)}
                                 disabled={!canPreviousPage}
-                                className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                                className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
                             >
-                                <span className="sr-only">Primera</span>
-                                <ChevronDownIcon className="h-5 w-5" aria-hidden="true" />
+                                <span className="sr-only">Primera página</span>
+                                <ChevronDoubleLeftIcon className="h-5 w-5" aria-hidden="true" />
                             </button>
                             <button
                                 onClick={() => previousPage()}
                                 disabled={!canPreviousPage}
-                                className="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                                className="relative inline-flex items-center px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
                             >
                                 <span className="sr-only">Anterior</span>
-                                <ChevronDownIcon className="h-5 w-5" aria-hidden="true" />
+                                <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
                             </button>
+                            <span className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300 focus:outline-offset-0">
+                                Página {pageIndex + 1} de {pageOptions.length}
+                            </span>
                             <button
                                 onClick={() => nextPage()}
                                 disabled={!canNextPage}
-                                className="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                                className="relative inline-flex items-center px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
                             >
                                 <span className="sr-only">Siguiente</span>
-                                <ChevronUpIcon className="h-5 w-5" aria-hidden="true" />
+                                <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
                             </button>
                             <button
                                 onClick={() => gotoPage(pageCount - 1)}
                                 disabled={!canNextPage}
-                                className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                                className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
                             >
-                                <span className="sr-only">Última</span>
-                                <ChevronUpIcon className="h-5 w-5" aria-hidden="true" />
+                                <span className="sr-only">Última página</span>
+                                <ChevronDoubleRightIcon className="h-5 w-5" aria-hidden="true" />
                             </button>
                         </nav>
                     </div>

@@ -5,4 +5,5 @@ export interface Usuario {
     first_name: string;
     last_name: string;
     is_active: boolean;
+    password?: string;
 }

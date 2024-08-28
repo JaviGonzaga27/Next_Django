@@ -5,26 +5,48 @@ export const getCitas = async () => {
     return response.data;
 };
 
-export const createCita = async (cita) => {
-    const response = await api.post('/api/citas/', cita);
+export const getCita = async (id) => {
+    const response = await api.get(`/api/citas/${id}/`);
     return response.data;
+};
+
+export const createCita = async (cita) => {
+    try {
+        const response = await api.post('/api/citas/', cita);
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
 };
 
 export const updateCita = async (id, cita) => {
-    const response = await api.put(`/api/citas/${id}`, cita);
-    return response.data;
+    try {
+        const response = await api.put(`/api/citas/${id}/`, cita);
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
 };
 
 export const deleteCita = async (id) => {
-    await api.delete(`/citas/${id}`);
+    try {
+        await api.delete(`/api/citas/${id}/`);
+    } catch (error) {
+        handleApiError(error);
+    }
 };
 
-export const cancelarCita = async (id) => {
-    const response = await api.post(`/api/citas/${id}/cancelar`);
-    return response.data;
-};
-
-export const completarCita = async (id) => {
-    const response = await api.post(`/citas/${id}/completar`);
-    return response.data;
+const handleApiError = (error) => {
+    if (error.response) {
+        console.error('Error data:', error.response.data);
+        console.error('Error status:', error.response.status);
+        console.error('Error headers:', error.response.headers);
+        throw new Error(JSON.stringify(error.response.data));
+    } else if (error.request) {
+        console.error('Error request:', error.request);
+        throw new Error('No se recibió respuesta del servidor');
+    } else {
+        console.error('Error message:', error.message);
+        throw new Error('Error al configurar la petición');
+    }
 };

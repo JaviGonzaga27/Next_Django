@@ -1,16 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, memo } from 'react';
+import PropTypes from 'prop-types';
 import { useAppContext } from '../../contexts/AppContext';
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
 
-const Layout = ({ children }) => {
+const Layout = memo(({ children }) => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const { user, logout, loading } = useAppContext();
 
-    const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+    const toggleSidebar = useCallback(() => setSidebarOpen(prev => !prev), []);
 
     if (loading) {
-        return <div>Cargando...</div>;
+        return (
+            <div className="flex items-center justify-center h-screen bg-gray-100">
+                <div className="text-2xl font-semibold text-gray-600">Cargando...</div>
+            </div>
+        );
     }
 
     return (
@@ -24,6 +29,12 @@ const Layout = ({ children }) => {
             </div>
         </div>
     );
+});
+
+Layout.propTypes = {
+    children: PropTypes.node.isRequired,
 };
+
+Layout.displayName = 'Layout';
 
 export default Layout;
